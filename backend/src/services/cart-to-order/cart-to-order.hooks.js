@@ -1,5 +1,7 @@
 const { authenticate } = require("@feathersjs/authentication").hooks;
 const { END_POINTS } = require("../../api-end-points");
+const mongoose = require("mongoose");
+
 module.exports = {
   before: {
     all: [authenticate("jwt")],
@@ -32,6 +34,10 @@ module.exports = {
   },
 };
 
+/**
+ * Create ordersObj with cartID and userID
+ * Perform create action on orders service's create api
+ */
 function convertCartToOrder() {
   return function (hook) {
     return new Promise((resolve, reject) => {
@@ -62,13 +68,22 @@ function convertCartToOrder() {
   };
 }
 
+/**
+ * Once the order is placed, update the cart as purchased
+ */
 function markCartAsPurchased() {
   return function (hook) {
     return new Promise((resolve, reject) => {
       const cartService = hook.app.service(END_POINTS.cart);
-      const { userID } = hook.data;
+      const cartID = hook.params.route.cartID;
+      const patchQuery = {
+        _id: mongoose.Types.ObjectId(cartID),
+      };
+      const patchObj = {
+        isPurchased: true,
+      };
       cartService
-        .create({ isPurchased: true, userID: userID })
+        .patch(patchQuery, patchObj)
         .then((cartResponse) => {
           console.log("cart response: setCartPurchased", cartResponse);
           hook.result = cartResponse;

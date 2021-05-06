@@ -32,13 +32,16 @@ module.exports = {
   },
 };
 
+/**
+ * Extract itemID and cartID from hook data
+ * Create cartItemObj and perform create action
+ */
 function addToCart() {
   return function (hook) {
     return new Promise((resolve, reject) => {
-      console.log("hook data: addToCart", hook.data);
-      console.log("hook params: addToCart", hook.params);
       const cartItemService = hook.app.service(END_POINTS.cartItems);
       const { itemID, cartID } = hook.data;
+      // console.log("cartID: addToCart", cartID);
       const cartItemObj = {
         itemID: itemID,
         cartID: cartID,
@@ -46,13 +49,13 @@ function addToCart() {
       cartItemService
         .create(cartItemObj)
         .then((cartCreated) => {
-          console.log("cartCreated", cartCreated);
           hook.result = Object.assign({}, hook.result, {
             cart: cartCreated,
           });
           resolve(hook);
         })
         .catch((cartItemErr) => {
+          // console.log("err: addToCart", err);
           reject(cartItemErr);
         });
     });
