@@ -8,6 +8,6 @@ module.exports = app => {
   authentication.register('jwt', new JWTStrategy());
   authentication.register('local', new LocalStrategy());
 
-  app.use('/authentication', authentication);
+  app.use('/users/login', authentication);
   app.configure(expressOauth());
 };

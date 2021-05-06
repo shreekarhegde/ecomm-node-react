@@ -1,21 +1,13 @@
-// users-model.js - A mongoose model
-//
+// item-model.js - A mongoose model
+// 
 // See http://mongoosejs.com/docs/models.html
-
-const { Schema } = require("mongoose");
-
 // for more of what you can do here.
 module.exports = function (app) {
-  const modelName = 'users';
+  const modelName = 'item';
   const mongooseClient = app.get('mongooseClient');
-  const schema = new mongooseClient.Schema({
-    email: { type: String, unique: true, lowercase: true },
-    password: { type: String },
-    isLoggedIn: { type: Boolean },
-    firstName: { type: String },
-    lastName: { type: String },
-    address: { type: String },
-    cartID: { type: Schema.Types.ObjectId, ref: 'cart' }
+  const { Schema } = mongooseClient;
+  const schema = new Schema({
+    name: { type: String, required: true }
   }, {
     timestamps: true
   });
@@ -26,5 +18,5 @@ module.exports = function (app) {
     mongooseClient.deleteModel(modelName);
   }
   return mongooseClient.model(modelName, schema);
-
+  
 };

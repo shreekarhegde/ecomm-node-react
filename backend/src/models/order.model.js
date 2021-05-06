@@ -1,21 +1,16 @@
-// users-model.js - A mongoose model
-//
+// order-model.js - A mongoose model
+// 
 // See http://mongoosejs.com/docs/models.html
 
 const { Schema } = require("mongoose");
 
 // for more of what you can do here.
 module.exports = function (app) {
-  const modelName = 'users';
+  const modelName = 'order';
   const mongooseClient = app.get('mongooseClient');
   const schema = new mongooseClient.Schema({
-    email: { type: String, unique: true, lowercase: true },
-    password: { type: String },
-    isLoggedIn: { type: Boolean },
-    firstName: { type: String },
-    lastName: { type: String },
-    address: { type: String },
-    cartID: { type: Schema.Types.ObjectId, ref: 'cart' }
+    cartID: { type: Schema.Types.ObjectId, ref: 'cart' },
+    userID: { type: Schema.Types.ObjectId, ref: 'user' },
   }, {
     timestamps: true
   });
@@ -26,5 +21,5 @@ module.exports = function (app) {
     mongooseClient.deleteModel(modelName);
   }
   return mongooseClient.model(modelName, schema);
-
+  
 };
