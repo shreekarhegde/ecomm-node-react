@@ -1,14 +1,14 @@
-const { authenticate } = require('@feathersjs/authentication').hooks;
-
+const { authenticate } = require("@feathersjs/authentication").hooks;
+const { END_POINTS } = require("../../api-end-points");
 module.exports = {
   before: {
-    all: [ authenticate('jwt') ],
+    all: [authenticate("jwt")],
     find: [],
     get: [],
-    create: [],
+    create: [addToCart()],
     update: [],
     patch: [],
-    remove: []
+    remove: [],
   },
 
   after: {
@@ -18,7 +18,7 @@ module.exports = {
     create: [],
     update: [],
     patch: [],
-    remove: []
+    remove: [],
   },
 
   error: {
@@ -28,6 +28,35 @@ module.exports = {
     create: [],
     update: [],
     patch: [],
-    remove: []
-  }
+    remove: [],
+  },
 };
+
+function addToCart() {
+  return function (hook) {
+    return new Promise((resolve, reject) => {
+      console.log("hook data: addToCart", hook.data);
+      console.log("hook params: addToCart", hook.params);
+      const cartItemService = hook.app.service(END_POINTS.cartItems);
+      const { itemID, cartID } = hook.data;
+      const cartItemObj = {
+        itemID: itemID,
+        cartID: cartID,
+      };
+      // let itemID = hook.data.itemID;
+      // let cartID = hook.data.cartID;
+      cartItemService
+        .create(cartItemObj)
+        .then((cartCreated) => {
+          console.log("cartCreated", cartCreated);
+          hook.result = Object.assign({}, hook.result, {
+            cart: cartCreated,
+          });
+          return resolve(hook);
+        })
+        .catch((cartItemErr) => {
+          return reject(cartItemErr);
+        });
+    });
+  };
+}
