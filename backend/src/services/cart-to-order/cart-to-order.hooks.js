@@ -15,7 +15,7 @@ module.exports = {
     all: [],
     find: [],
     get: [],
-    create: [convertCartToOrder()],
+    create: [convertCartToOrder(), markCartAsPurchased()],
     update: [],
     patch: [],
     remove: [],
@@ -45,6 +45,7 @@ function convertCartToOrder() {
         .create(ordersObj)
         .then((ordersResponse) => {
           console.log("ordersResponse: convertCartToOrder", ordersResponse);
+
           hook.result = Object.assign(
             {},
             {
@@ -57,6 +58,23 @@ function convertCartToOrder() {
           console.log("err: convertCartToOrder", err);
           reject(err);
         });
+    });
+  };
+}
+
+function markCartAsPurchased() {
+  return function (hook) {
+    return new Promise((resolve, reject) => {
+      const cartService = hook.app.service(END_POINTS.cart);
+      const { userID } = hook.data;
+      cartService
+        .create({ isPurchased: true, userID: userID })
+        .then((cartResponse) => {
+          console.log("cart response: setCartPurchased", cartResponse);
+          hook.result = cartResponse;
+          resolve(hook);
+        })
+        .catch((err) => reject(err));
     });
   };
 }

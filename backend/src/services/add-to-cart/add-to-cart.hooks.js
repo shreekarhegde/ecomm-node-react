@@ -43,8 +43,6 @@ function addToCart() {
         itemID: itemID,
         cartID: cartID,
       };
-      // let itemID = hook.data.itemID;
-      // let cartID = hook.data.cartID;
       cartItemService
         .create(cartItemObj)
         .then((cartCreated) => {
@@ -52,10 +50,10 @@ function addToCart() {
           hook.result = Object.assign({}, hook.result, {
             cart: cartCreated,
           });
-          return resolve(hook);
+          resolve(hook);
         })
         .catch((cartItemErr) => {
-          return reject(cartItemErr);
+          reject(cartItemErr);
         });
     });
   };

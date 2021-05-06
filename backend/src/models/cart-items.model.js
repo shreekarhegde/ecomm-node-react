@@ -12,6 +12,7 @@ module.exports = function (app) {
     {
       cartID: { type: Schema.Types.ObjectId, ref: "cart" },
       itemID: { type: Schema.Types.ObjectId, ref: "item" },
+      count: { type: Number, min: 1 },
     },
     {
       timestamps: true,
