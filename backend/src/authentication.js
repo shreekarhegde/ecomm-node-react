@@ -15,6 +15,14 @@ module.exports = (app) => {
 
   app.use("/user/login", authentication, checkLoggedIn, updateUserToken);
 
+  /**
+   * if user has a token, he is already logged in
+   * Send the error message with error code
+   * otherwise proceed to update the user with token data
+   * @param {object} req
+   * @param {object} res
+   * @param {callback} next
+   */
   function checkLoggedIn(req, res, next) {
     if (res.data.user.token) {
       res.status(400).send({ error: "This user is already logged in." });
@@ -23,6 +31,12 @@ module.exports = (app) => {
     }
   }
 
+  /**
+   * Update user with token
+   * @param {object} req
+   * @param {object} res
+   * @param {callback} next
+   */
   function updateUserToken(req, res, next) {
     const userService = app.service(END_POINTS.user);
     const patchQuery = {
