@@ -13,10 +13,17 @@ module.exports = (app) => {
   authentication.register("jwt", new JWTStrategy());
   authentication.register("local", new LocalStrategy());
 
-  app.use("/user/login", authentication, updateUserToken);
+  app.use("/user/login", authentication, checkLoggedIn, updateUserToken);
+
+  function checkLoggedIn(req, res, next) {
+    if (res.data.user.token) {
+      res.status(400).send({ error: "This user is already logged in." });
+    } else {
+      next();
+    }
+  }
 
   function updateUserToken(req, res, next) {
-    console.log("authenticated", res.data);
     const userService = app.service(END_POINTS.user);
     const patchQuery = {
       _id: mongoose.Types.ObjectId(res.data.user._id),
@@ -27,7 +34,6 @@ module.exports = (app) => {
     userService
       .patch(patchQuery, patchObj)
       .then((patchRes) => {
-        console.log("patchRes", patchRes);
         next();
       })
       .catch((err) => res.send({ err: err }));
