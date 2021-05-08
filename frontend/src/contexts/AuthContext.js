@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import axios from 'axios';
 import { API, BACKEND_URL } from '../constants/api-endpoints';
 import { useHistory } from 'react-router';
+import ApiService from '../Services/api.config';
 
 const AuthContext = React.createContext();
 
@@ -23,7 +24,8 @@ export default function AuthProvider({ children }) {
 			password: password,
 		};
 		try {
-			userResponse = await axios.post(BACKEND_URL + API.user, user);
+			// userResponse = await axios.post(BACKEND_URL + API.user, user);
+			userResponse = await ApiService.post(BACKEND_URL + API.user, user);
 			console.log('userResponse: signUp', userResponse.data.user);
 			setCurrentUser(userResponse.data.user);
 			setLoading(false);
@@ -41,7 +43,8 @@ export default function AuthProvider({ children }) {
 			strategy: 'local',
 		};
 		try {
-			userResponse = await axios.post(BACKEND_URL + API.login, user);
+			// userResponse = await axios.post(BACKEND_URL + API.login, user);
+			userResponse = await ApiService.post(BACKEND_URL + API.login, user);
 			console.log('userResponse.data', userResponse.data.accessToken);
 			setCurrentUser(userResponse.data.user);
 			sessionStorage.setItem('accessToken', userResponse.data.accessToken);

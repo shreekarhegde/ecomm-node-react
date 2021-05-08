@@ -20,7 +20,7 @@ export default function Login() {
 			console.log('email', emailRef.current.value);
 			console.log('password', passwordRef.current.value);
 			await logIn(emailRef.current.value, passwordRef.current.value);
-			history.push('/');
+			history.push('/store');
 		} catch (error) {
 			console.log('error', error);
 			setError('Failed to Log In');

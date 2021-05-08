@@ -21,7 +21,7 @@ const Header = () => {
 				{' '}
 				<CartIcon /> Cart ({itemCount})
 			</Link>
-			<Link variant='link' onClick={handleLogout}>
+			<Link to='/login' onClick={handleLogout}>
 				Log Out
 			</Link>
 		</header>
