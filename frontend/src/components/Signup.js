@@ -35,8 +35,8 @@ export default function Signup() {
 	}
 
 	return (
-		<div>
-			<Card>
+		<div className='container m-auto' style={{ maxWidth: '500px' }}>
+			<Card className='mt-5'>
 				<Card.Body>
 					<h2 className='text-center mb-4'>Sign Up</h2>
 					{error && <Alert variant='danger'>{error}</Alert>}

@@ -12,7 +12,7 @@ const Routes = () => {
 		<Router>
 			<Switch>
 				<AuthProvider>
-					<Route exact path='/' component={Store} />
+					<Route path='/store' component={Store} />
 					<Route path='/cart' component={Cart} />
 					<Route path='/signup' component={Signup} />
 					<Route path='/login' component={Login} />
