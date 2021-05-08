@@ -5,7 +5,6 @@ import styles from './ProductsGrid.module.scss';
 
 const ProductsGrid = () => {
 	const { products } = useContext(ProductsContext);
-
 	return (
 		<div className={styles.p__container}>
 			<div className='row'>
@@ -20,7 +19,7 @@ const ProductsGrid = () => {
 			</div>
 			<div className={styles.p__grid}>
 				{products.map((product) => (
-					<ProductItem key={product.id} product={product} />
+					<ProductItem key={product._id} product={product} />
 				))}
 			</div>
 			<div className={styles.p__footer}></div>

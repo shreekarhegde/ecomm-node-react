@@ -1,13 +1,13 @@
 import React, { useContext, useState } from 'react';
-import axios from 'axios';
 import { API, BACKEND_URL } from '../constants/api-endpoints';
 import { useHistory } from 'react-router';
 import ApiService from '../Services/api.config';
+import { TokenService } from '../Services/storage.service';
+import { UserService } from '../Services/storage.service';
 
 const AuthContext = React.createContext();
 
 export function UseAuth() {
-	console.log('AuthContex', AuthContext);
 	return useContext(AuthContext);
 }
 
@@ -24,7 +24,6 @@ export default function AuthProvider({ children }) {
 			password: password,
 		};
 		try {
-			// userResponse = await axios.post(BACKEND_URL + API.user, user);
 			userResponse = await ApiService.post(BACKEND_URL + API.user, user);
 			console.log('userResponse: signUp', userResponse.data.user);
 			setCurrentUser(userResponse.data.user);
@@ -43,26 +42,24 @@ export default function AuthProvider({ children }) {
 			strategy: 'local',
 		};
 		try {
-			// userResponse = await axios.post(BACKEND_URL + API.login, user);
 			userResponse = await ApiService.post(BACKEND_URL + API.login, user);
-			console.log('userResponse.data', userResponse.data.accessToken);
 			setCurrentUser(userResponse.data.user);
-			sessionStorage.setItem('accessToken', userResponse.data.accessToken);
+			UserService.saveUser(userResponse.data.user);
+			TokenService.saveToken(userResponse.data.accessToken);
+			ApiService.setHeader();
 			setLoading(false);
 		} catch (error) {
-			console.log('error', error);
 			throw Error(error);
 		}
 	}
 
-	async function logOut(userID) {
+	async function logOut() {
 		const patchObj = { token: '' };
-		const accessToken = sessionStorage.getItem('accessToken');
-		console.log('accessToken', accessToken);
-		const headers = { headers: { Authorization: `Bearer ${accessToken}` } };
+		const userID = UserService.getUser()._id;
 		try {
-			await axios.patch(BACKEND_URL + API.user + '/' + userID, patchObj, headers);
-			sessionStorage.removeItem('accessToken');
+			ApiService.setHeader();
+			await ApiService.patch(BACKEND_URL + API.user + '/' + userID, patchObj);
+			TokenService.removeToken();
 			history.push('/login');
 		} catch (error) {
 			throw Error(error);

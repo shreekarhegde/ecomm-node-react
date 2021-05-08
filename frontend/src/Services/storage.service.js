@@ -1,3 +1,6 @@
+import { API } from '../constants/api-endpoints';
+import ApiService from './api.config';
+
 const TOKEN_KEY = 'REACTAPP.TOKEN';
 const USER = 'REACTAPP.USER';
 const REFRESH_TOKEN_KEY = 'REACTAPP.REFRESH_TOKEN';
@@ -34,7 +37,7 @@ const TokenService = {
 	},
 };
 
-const SetUser = {
+const UserService = {
 	getUser() {
 		let user = localStorage.getItem(USER);
 		return JSON.parse(user);
@@ -46,10 +49,17 @@ const SetUser = {
 	saveUser(user) {
 		localStorage.setItem(USER, JSON.stringify(user));
 	},
-
+	async getUserCart() {
+		ApiService.init();
+		ApiService.setHeader();
+		let userID = UserService.getUser()._id;
+		let cartData = await ApiService.get(API.cart + '/?userID=' + `${userID}`);
+		console.log('cartData', cartData);
+		return cartData.data[0];
+	},
 	removeUser() {
 		localStorage.removeItem(USER);
 	},
 };
 
-export { TokenService, SetUser };
+export { TokenService, UserService };

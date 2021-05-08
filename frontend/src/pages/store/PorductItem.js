@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import { Link } from 'react-router-dom';
 import { CartContext } from '../../contexts/CartContext';
 import { formatNumber } from '../../helpers/utils';
 
@@ -7,7 +6,9 @@ const ProductItem = ({ product }) => {
 	const { addProduct, cartItems, increase } = useContext(CartContext);
 
 	const isInCart = (product) => {
-		return !!cartItems.find((item) => item.id === product.id);
+		console.log('product', product);
+		console.log('cartItems', cartItems);
+		return !!cartItems.find((item) => item._id === product._id);
 	};
 
 	return (
@@ -15,16 +16,12 @@ const ProductItem = ({ product }) => {
 			<img
 				style={{ display: 'block', margin: '0 auto 10px', maxHeight: '200px' }}
 				className='img-fluid'
-				src={product.photo + '?v=' + product.id}
+				src={product.photo + '?v=' + product._id}
 				alt=''
 			/>
 			<p>{product.name}</p>
-			<h3 className='text-left'>{formatNumber(product.price)}</h3>
+			<h3 className='text-left'>{formatNumber(product.cost)}</h3>
 			<div className='text-right'>
-				<Link to='/' className='btn btn-link btn-sm mr-2'>
-					Details
-				</Link>
-
 				{isInCart(product) && (
 					<button onClick={() => increase(product)} className='btn btn-outline-primary btn-sm'>
 						Add more

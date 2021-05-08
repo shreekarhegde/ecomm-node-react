@@ -11,7 +11,7 @@ const Header = () => {
 
 	function handleLogout() {
 		console.log('currentUser: handleLogout', currentUser);
-		logOut(currentUser._id);
+		logOut();
 	}
 
 	return (

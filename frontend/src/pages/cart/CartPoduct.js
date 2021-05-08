@@ -11,7 +11,7 @@ const CartProducts = () => {
 		<div className={styles.p__container}>
 			<div className='card card-body border-0'>
 				{cartItems.map((product) => (
-					<CartItem key={product.id} product={product} />
+					<CartItem key={product._id} product={product} />
 				))}
 			</div>
 		</div>

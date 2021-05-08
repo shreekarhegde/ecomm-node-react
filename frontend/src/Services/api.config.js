@@ -1,9 +1,10 @@
 import axios from 'axios';
+import { BACKEND_URL } from '../constants/api-endpoints';
 import { TokenService } from './storage.service';
 
 const ApiService = {
-	init(baseURL) {
-		axios.defaults.baseURL = baseURL;
+	init() {
+		axios.defaults.baseURL = BACKEND_URL;
 	},
 
 	setHeader() {
@@ -24,6 +25,10 @@ const ApiService = {
 
 	put(resource, data) {
 		return axios.put(resource, data);
+	},
+
+	patch(resource, data) {
+		return axios.patch(resource, data);
 	},
 
 	delete(resource) {
