@@ -57,9 +57,13 @@ export default function AuthProvider({ children }) {
 		const accessToken = sessionStorage.getItem('accessToken');
 		console.log('accessToken', accessToken);
 		const headers = { headers: { Authorization: `Bearer ${accessToken}` } };
-		await axios.patch(BACKEND_URL + API.user + '/' + userID, patchObj, headers);
-		sessionStorage.removeItem('accessToken');
-		history.push('/login');
+		try {
+			await axios.patch(BACKEND_URL + API.user + '/' + userID, patchObj, headers);
+			sessionStorage.removeItem('accessToken');
+			history.push('/login');
+		} catch (error) {
+			throw Error(error);
+		}
 	}
 
 	const value = {
