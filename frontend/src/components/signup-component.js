@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { Form, Button, Card, Alert } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { UseAuth, currentUser } from '../contexts/AuthContext';
 
 export default function Signup() {
@@ -10,6 +10,7 @@ export default function Signup() {
 	const { signUp } = UseAuth();
 	const [error, setError] = useState('');
 	const [loading, setLoading] = useState(false);
+	const history = useHistory();
 
 	async function handleSubmit(e) {
 		e.preventDefault();
@@ -24,6 +25,7 @@ export default function Signup() {
 			console.log('email', emailRef.current.value);
 			console.log('password', passwordRef.current.value);
 			await signUp(emailRef.current.value, passwordRef.current.value);
+			history.push('/login');
 		} catch (error) {
 			console.log('error', error);
 			setError('Failed to create an account');
@@ -38,7 +40,6 @@ export default function Signup() {
 				<Card.Body>
 					<h2 className='text-center mb-4'>Sign Up</h2>
 					{error && <Alert variant='danger'>{error}</Alert>}
-					{JSON.stringify(currentUser)}
 					<Form onSubmit={handleSubmit}>
 						<Form.Group id='email'>
 							<Form.Label>Email</Form.Label>
@@ -60,7 +61,7 @@ export default function Signup() {
 			</Card>
 			<div className='w-100 text-center mt-2'>
 				Already have an account?
-				<Link to='/login'>Log In</Link>
+				<Link to='/login'> Log In</Link>
 			</div>
 		</div>
 	);
