@@ -1,5 +1,5 @@
 import React from 'react';
-import Signup from './signup-component';
+import Signup from './Signup';
 import { Container } from 'react-bootstrap';
 import AuthProvider from '../contexts/AuthContext';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
@@ -24,15 +24,13 @@ function App() {
 		// 		</Router>
 		// 	</div>
 		// </Container>
-		<AuthProvider>
-			<HelmetProvider>
-				<ProductsContextProvider>
-					<CartContextProvider>
-						<Routes />
-					</CartContextProvider>
-				</ProductsContextProvider>
-			</HelmetProvider>
-		</AuthProvider>
+		<HelmetProvider>
+			<ProductsContextProvider>
+				<CartContextProvider>
+					<Routes />
+				</CartContextProvider>
+			</ProductsContextProvider>
+		</HelmetProvider>
 	);
 }
 
