@@ -37,6 +37,8 @@ const CartContextProvider = ({ children }) => {
 	};
 
 	const addProduct = async (payload) => {
+		console.log('add product', payload);
+		dispatch({ type: 'ADD_ITEM', payload });
 		try {
 			const cartData = await UserService.getUserCart();
 
@@ -44,7 +46,6 @@ const CartContextProvider = ({ children }) => {
 			const itemID = payload._id;
 			const cartObj = { cartID: cartID, itemID: itemID, count: 1 };
 			await ApiService.post(API.addToCart, cartObj);
-			dispatch({ type: 'ADD_ITEM', payload });
 		} catch (error) {
 			throw Error(error);
 		}
