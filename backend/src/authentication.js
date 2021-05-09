@@ -13,7 +13,7 @@ module.exports = (app) => {
   authentication.register("jwt", new JWTStrategy());
   authentication.register("local", new LocalStrategy());
 
-  app.use("/user/login", authentication, updateUserToken);
+  app.use("/user/login", authentication, checkLoggedIn, updateUserToken);
 
   /**
    * if user has a token, he is already logged in
