@@ -41,7 +41,6 @@ function addToCart() {
     return new Promise((resolve, reject) => {
       const cartItemService = hook.app.service(END_POINTS.cartItems);
       const { itemID, cartID } = hook.data;
-      // console.log("cartID: addToCart", cartID);
       const cartItemObj = {
         itemID: itemID,
         cartID: cartID,

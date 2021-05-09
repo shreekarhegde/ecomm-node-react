@@ -7,7 +7,7 @@ module.exports = {
     get: [],
     create: [],
     update: [],
-    patch: [test()],
+    patch: [],
     remove: [],
   },
 
@@ -31,12 +31,3 @@ module.exports = {
     remove: [],
   },
 };
-
-function test() {
-  return function (hook) {
-    console.log("====================================");
-    console.log("hitting this");
-    console.log("====================================");
-    return hook;
-  };
-}

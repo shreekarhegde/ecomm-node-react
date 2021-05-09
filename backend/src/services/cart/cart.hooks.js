@@ -33,10 +33,12 @@ module.exports = {
   },
 };
 
+/**
+ * Increment/Decrement the count of item in cart
+ */
 function modifyCount() {
   return function (hook) {
     return new Promise((resolve, reject) => {
-      console.log("hook: increaseCount", hook);
       let cartID = hook.data.cartID;
       let patchObj = {};
       if(hook.data.increment) patchObj = { $inc: { count: 1 } };
@@ -47,12 +49,10 @@ function modifyCount() {
           query: { cartID: mongoose.Types.ObjectId(cartID) }
         })
         .then((res) => {
-          console.log("updated", res);
           hook.result = res;
           resolve(hook);
         })
         .catch((error) => {
-          console.log("update failed", error);
           reject(error);
         });
     });
