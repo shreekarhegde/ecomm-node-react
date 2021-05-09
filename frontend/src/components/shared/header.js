@@ -10,7 +10,6 @@ const Header = () => {
 	const { currentUser, logOut } = UseAuth();
 
 	function handleLogout() {
-		console.log('currentUser: handleLogout', currentUser);
 		logOut();
 	}
 

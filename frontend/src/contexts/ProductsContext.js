@@ -13,7 +13,6 @@ const ProductsContextProvider = ({ children }) => {
 			const items = response.data;
 			products = items.data;
 			setProducts(products);
-			console.log('products', products);
 		}
 		getItems();
 	}, []);

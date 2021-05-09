@@ -13,7 +13,6 @@ const CartContextProvider = ({ children }) => {
 	const [state, dispatch] = useReducer(CartReducer, initialState);
 
 	const increase = async (payload) => {
-		console.log('payload', payload);
 		try {
 			const cartData = await UserService.getUserCart();
 			const cartID = cartData._id;
@@ -40,7 +39,7 @@ const CartContextProvider = ({ children }) => {
 	const addProduct = async (payload) => {
 		try {
 			const cartData = await UserService.getUserCart();
-			console.log('cartData', cartData);
+
 			const cartID = cartData._id;
 			const itemID = payload._id;
 			const cartObj = { cartID: cartID, itemID: itemID, count: 1 };
@@ -74,7 +73,6 @@ const CartContextProvider = ({ children }) => {
 	};
 
 	const handleCheckout = async() => {
-		console.log('CHECKOUT', state);
 		try {
 			const cartData = await UserService.getUserCart();
 			const cartID = cartData._id;
@@ -83,10 +81,10 @@ const CartContextProvider = ({ children }) => {
 				ApiService.delete(API.cartItems+ '/?cartID=' + cartID),
 				ApiService.post(API.cart+`/${cartID}/complete`)
 			]).then(res => {
-				console.log('response',res);
+	
 				dispatch({ type: 'CHECKOUT' });
 			}).catch(error => {
-				console.log('error', error);
+	
 			})
 		} catch (error) {
 			throw Error(error);

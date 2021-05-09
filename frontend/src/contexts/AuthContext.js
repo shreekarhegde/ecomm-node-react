@@ -25,12 +25,9 @@ export default function AuthProvider({ children }) {
 		};
 		try {
 			userResponse = await ApiService.post(BACKEND_URL + API.user, user);
-			console.log('userResponse: signUp', userResponse.data.user);
 			setCurrentUser(userResponse.data.user);
 			setLoading(false);
-			console.log('userResponse', userResponse);
 		} catch (error) {
-			console.log('error', error);
 			throw Error(error);
 		}
 	}

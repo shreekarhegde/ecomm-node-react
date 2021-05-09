@@ -61,7 +61,6 @@ const UserService = {
 			try {
 				let cartReponse = await ApiService.get(API.cart + '/?userID=' + `${userID}`);
 				let cart = cartReponse.data;
-				console.log('cart', cart);
 				resolve(cart.data[0]);
 			} catch (error) {
 				reject(error);

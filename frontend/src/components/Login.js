@@ -17,12 +17,9 @@ export default function Login() {
 		try {
 			setError('');
 			setLoading(true);
-			console.log('email', emailRef.current.value);
-			console.log('password', passwordRef.current.value);
 			await logIn(emailRef.current.value, passwordRef.current.value);
 			history.push('/store');
 		} catch (error) {
-			console.log('error', error);
 			setError('Failed to Log In');
 		}
 
