@@ -16,7 +16,7 @@ module.exports = function (app) {
       firstName: { type: String },
       lastName: { type: String },
       address: { type: String },
-      token: { type: String, unique: true },
+      token: { type: String },
       cartID: { type: Schema.Types.ObjectId, ref: "cart" },
     },
     {

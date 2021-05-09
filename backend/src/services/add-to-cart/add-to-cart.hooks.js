@@ -56,7 +56,6 @@ function addToCart() {
           resolve(hook);
         })
         .catch((cartItemErr) => {
-          // console.log("err: addToCart", err);
           reject(cartItemErr);
         });
     });

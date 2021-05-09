@@ -76,14 +76,9 @@ function markCartAsPurchased() {
     return new Promise((resolve, reject) => {
       const cartService = hook.app.service(END_POINTS.cart);
       const cartID = hook.params.route.cartID;
-      const patchQuery = {
-        _id: mongoose.Types.ObjectId(cartID),
-      };
-      const patchObj = {
-        isPurchased: true,
-      };
+      const useID = hook.params.user._id;
       cartService
-        .patch(patchQuery, patchObj)
+        .update(cartID, { isPurchased: true, userID: useID})
         .then((cartResponse) => {
           console.log("cart response: setCartPurchased", cartResponse);
           hook.result = cartResponse;

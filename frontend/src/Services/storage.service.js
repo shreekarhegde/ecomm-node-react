@@ -35,6 +35,10 @@ const TokenService = {
 	removeRefreshToken() {
 		localStorage.removeItem(REFRESH_TOKEN_KEY);
 	},
+
+	clearLocalStorage(){
+		localStorage.clear()
+	}
 };
 
 const UserService = {

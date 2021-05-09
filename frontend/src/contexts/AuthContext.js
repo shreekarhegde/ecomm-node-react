@@ -59,7 +59,7 @@ export default function AuthProvider({ children }) {
 		try {
 			ApiService.setHeader();
 			await ApiService.patch(BACKEND_URL + API.user + '/' + userID, patchObj);
-			TokenService.removeToken();
+			TokenService.clearLocalStorage();
 			history.push('/login');
 		} catch (error) {
 			throw Error(error);

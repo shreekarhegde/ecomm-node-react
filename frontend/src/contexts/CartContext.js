@@ -38,7 +38,6 @@ const CartContextProvider = ({ children }) => {
 	};
 
 	const addProduct = async (payload) => {
-		console.log('payload', payload);
 		try {
 			const cartData = await UserService.getUserCart();
 			console.log('cartData', cartData);
@@ -63,12 +62,35 @@ const CartContextProvider = ({ children }) => {
 		}
 	};
 
-	const clearCart = () => {
-		dispatch({ type: 'CLEAR' });
+	const clearCart = async() => {
+		try {
+			const cartData = await UserService.getUserCart();
+			const cartID = cartData._id;
+			await ApiService.delete(API.cartItems+ '/?cartID=' + cartID);
+			dispatch({ type: 'CLEAR' });
+		} catch (error) {
+			throw Error(error);
+		}
 	};
 
-	const handleCheckout = () => {
+	const handleCheckout = async() => {
 		console.log('CHECKOUT', state);
+		try {
+			const cartData = await UserService.getUserCart();
+			const cartID = cartData._id;
+			Promise.all([
+				ApiService.patch(API.cart+`/${cartID}`, {isPurchased: true }),
+				ApiService.delete(API.cartItems+ '/?cartID=' + cartID),
+				ApiService.post(API.cart+`/${cartID}/complete`)
+			]).then(res => {
+				console.log('response',res);
+				dispatch({ type: 'CHECKOUT' });
+			}).catch(error => {
+				console.log('error', error);
+			})
+		} catch (error) {
+			throw Error(error);
+		}
 		dispatch({ type: 'CHECKOUT' });
 	};
 

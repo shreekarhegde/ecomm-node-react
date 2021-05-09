@@ -1,5 +1,6 @@
 const { authenticate } = require('@feathersjs/authentication').hooks;
-
+const { END_POINTS } = require('../../api-end-points');
+const mongoose = require('mongoose');
 const {
   hashPassword, protect
 } = require('@feathersjs/authentication-local').hooks;
@@ -23,7 +24,7 @@ module.exports = {
     ],
     find: [],
     get: [],
-    create: [],
+    create: [createCart()],
     update: [],
     patch: [],
     remove: []
@@ -39,3 +40,22 @@ module.exports = {
     remove: []
   }
 };
+
+
+function createCart(){
+  return function(hook){
+    return new Promise((resolve, reject) => {
+      const cartService = hook.app.service(END_POINTS.cart);
+      console.log('hook createCart', hook);
+      const userID = hook.result._id
+      const cartObj = { userID: mongoose.Types.ObjectId(userID) , isPurchased: false };
+      cartService.create(cartObj).then(cartResponse => {
+        hook.result.cartResponse = cartResponse;
+        return resolve(hook);
+      }).catch(error => {
+        console.log('error', error);
+        return reject(error);
+      })
+    })
+  }
+}
