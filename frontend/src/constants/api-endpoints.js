@@ -4,6 +4,7 @@ export const API = {
 	item: '/item',
 	addToCart: '/cart/add',
 	cart: '/cart',
+	cartItems: '/cart-items',
 };
 
 export const BACKEND_URL = 'http://localhost:3030';

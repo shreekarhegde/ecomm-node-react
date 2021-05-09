@@ -1,14 +1,15 @@
-const { authenticate } = require('@feathersjs/authentication').hooks;
-
+const { authenticate } = require("@feathersjs/authentication").hooks;
+const { END_POINTS } = require("../../api-end-points");
+const mongoose = require("mongoose");
 module.exports = {
   before: {
-    all: [ authenticate('jwt') ],
+    all: [authenticate("jwt")],
     find: [],
     get: [],
     create: [],
     update: [],
-    patch: [],
-    remove: []
+    patch: [modifyCount()],
+    remove: [],
   },
 
   after: {
@@ -18,7 +19,7 @@ module.exports = {
     create: [],
     update: [],
     patch: [],
-    remove: []
+    remove: [],
   },
 
   error: {
@@ -28,6 +29,32 @@ module.exports = {
     create: [],
     update: [],
     patch: [],
-    remove: []
-  }
+    remove: [],
+  },
 };
+
+function modifyCount() {
+  return function (hook) {
+    return new Promise((resolve, reject) => {
+      console.log("hook: increaseCount", hook);
+      let cartID = hook.data.cartID;
+      let patchObj = {};
+      if(hook.data.increment) patchObj = { $inc: { count: 1 } };
+      else patchObj = { $inc: { count: -1 } };
+      const cartItemsService = hook.app.service(END_POINTS.cartItems);
+      cartItemsService
+        .patch(null, patchObj, {
+          query: { cartID: mongoose.Types.ObjectId(cartID) }
+        })
+        .then((res) => {
+          console.log("updated", res);
+          hook.result = res;
+          resolve(hook);
+        })
+        .catch((error) => {
+          console.log("update failed", error);
+          reject(error);
+        });
+    });
+  };
+}

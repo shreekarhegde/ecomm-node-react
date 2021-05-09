@@ -1,4 +1,7 @@
 import React, { createContext, useReducer } from 'react';
+import { API } from '../constants/api-endpoints';
+import ApiService from '../Services/api.config';
+import { UserService } from '../Services/storage.service';
 import { CartReducer, sumItems } from './CartReducer';
 
 export const CartContext = createContext();
@@ -9,20 +12,55 @@ const initialState = { cartItems: storage, ...sumItems(storage), checkout: false
 const CartContextProvider = ({ children }) => {
 	const [state, dispatch] = useReducer(CartReducer, initialState);
 
-	const increase = (payload) => {
-		dispatch({ type: 'INCREASE', payload });
+	const increase = async (payload) => {
+		console.log('payload', payload);
+		try {
+			const cartData = await UserService.getUserCart();
+			const cartID = cartData._id;
+			const cartObj = { cartID: cartID, increment: true };
+			await ApiService.patch(API.cart, cartObj);
+			dispatch({ type: 'INCREASE', payload });
+		} catch (error) {
+			throw Error(error);
+		}
 	};
 
-	const decrease = (payload) => {
-		dispatch({ type: 'DECREASE', payload });
+	const decrease = async (payload) => {
+		const cartData = await UserService.getUserCart();
+		const cartID = cartData._id;
+		const cartObj = { cartID: cartID, increment: false };	
+		try{
+			await ApiService.patch(API.cart, cartObj);
+			dispatch({ type: 'DECREASE', payload });
+		}catch(error){
+			throw Error(error)
+		}
 	};
 
-	const addProduct = (payload) => {
-		dispatch({ type: 'ADD_ITEM', payload });
+	const addProduct = async (payload) => {
+		console.log('payload', payload);
+		try {
+			const cartData = await UserService.getUserCart();
+			console.log('cartData', cartData);
+			const cartID = cartData._id;
+			const itemID = payload._id;
+			const cartObj = { cartID: cartID, itemID: itemID, count: 1 };
+			await ApiService.post(API.addToCart, cartObj);
+			dispatch({ type: 'ADD_ITEM', payload });
+		} catch (error) {
+			throw Error(error);
+		}
 	};
 
-	const removeProduct = (payload) => {
-		dispatch({ type: 'REMOVE_ITEM', payload });
+	const removeProduct = async (payload) => {
+		try {
+			const cartData = await UserService.getUserCart();
+			const cartID = cartData._id;
+			await ApiService.delete(API.cartItems+ '/?cartID=' + cartID);
+			dispatch({ type: 'REMOVE_ITEM', payload });
+		} catch (error) {
+			throw Error(error);
+		}
 	};
 
 	const clearCart = () => {

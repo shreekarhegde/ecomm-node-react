@@ -49,13 +49,20 @@ const UserService = {
 	saveUser(user) {
 		localStorage.setItem(USER, JSON.stringify(user));
 	},
-	async getUserCart() {
-		ApiService.init();
-		ApiService.setHeader();
-		let userID = UserService.getUser()._id;
-		let cartData = await ApiService.get(API.cart + '/?userID=' + `${userID}`);
-		console.log('cartData', cartData);
-		return cartData.data[0];
+	getUserCart() {
+		return new Promise(async (resolve, reject) => {
+			ApiService.init();
+			ApiService.setHeader();
+			let userID = UserService.getUser()._id;
+			try {
+				let cartReponse = await ApiService.get(API.cart + '/?userID=' + `${userID}`);
+				let cart = cartReponse.data;
+				console.log('cart', cart);
+				resolve(cart.data[0]);
+			} catch (error) {
+				reject(error);
+			}
+		});
 	},
 	removeUser() {
 		localStorage.removeItem(USER);

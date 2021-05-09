@@ -45,6 +45,7 @@ function addToCart() {
       const cartItemObj = {
         itemID: itemID,
         cartID: cartID,
+        count: 1,
       };
       cartItemService
         .create(cartItemObj)
